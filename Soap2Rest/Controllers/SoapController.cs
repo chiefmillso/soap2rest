@@ -19,7 +19,7 @@ namespace Soap2Rest.Controllers
     public class SoapController : ApiController
     {
         //[OutputCache(Duration = 60 * 1, VaryByParam = "action;url;payload", Location = OutputCacheLocation.ServerAndClient, NoStore = true)]
-        public async Task<HttpResponseMessage> Get(string action, string url, string payload)
+        public async Task<HttpResponseMessage> Get(string action, string service, string payload)
         {
             const string soapTemplate =
                 "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body></soap:Body></soap:Envelope>";
@@ -38,11 +38,11 @@ namespace Soap2Rest.Controllers
                 requestBody.Add(requestPayload);
             }
             var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add("SOAPTARGET", url);
+            httpClient.DefaultRequestHeaders.Add("SOAPTARGET", service);
             httpClient.DefaultRequestHeaders.Add("SOAPAction", action);
             var request = new StringContent(requestXml.ToString(SaveOptions.DisableFormatting), Encoding.UTF8,
                                             "text/xml");
-            HttpResponseMessage resultResponse = await httpClient.PostAsync(url, request);
+            HttpResponseMessage resultResponse = await httpClient.PostAsync(service, request);
             var resultContent = await resultResponse.Content.ReadAsStringAsync();
             var resultXml = XDocument.Parse(resultContent);
             if (resultXml.Root == null)
