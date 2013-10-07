@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Soap2Rest.App_Start;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using WebApiContrib.Formatting.Jsonp;
 
 namespace Soap2Rest
 {
@@ -11,9 +13,11 @@ namespace Soap2Rest
         {
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                routeTemplate: "api/{controller}/{id}/{format}/{_}",
+                defaults: new { id = RouteParameter.Optional, format = RouteParameter.Optional, @_ = RouteParameter.Optional }
             );
+
+            FormatterConfig.RegisterFormatters(GlobalConfiguration.Configuration.Formatters);
 
             // Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.
             // To avoid processing unexpected or malicious queries, use the validation settings on QueryableAttribute to validate incoming queries.
