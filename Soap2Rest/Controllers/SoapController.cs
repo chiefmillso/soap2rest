@@ -54,17 +54,16 @@ namespace Soap2Rest.Controllers
 
             string content = "";
             string mediaType = "text/plain";
-            string accept = Request.Headers.Accept.ToString();
-            switch (accept)
+            var accept = Request.Headers.Accept;
+            if (accept.Contains(MediaTypeWithQualityHeaderValue.Parse("text/xml")))
             {
-                case "text/xml":
                     content = resultBody.ToString(SaveOptions.OmitDuplicateNamespaces);
                     mediaType = "text/xml";
-                    break;
-                case "application/json":
-                    content = JsonConvert.SerializeXNode(resultBody, Formatting.Indented, true);
+            }
+            if (accept.Contains(MediaTypeWithQualityHeaderValue.Parse("application/json")))
+            {
+                   content = JsonConvert.SerializeXNode(resultBody, Formatting.Indented, true);
                     mediaType = "application/json";
-                    break;
             }
 
             var response = new HttpResponseMessage(HttpStatusCode.OK)
