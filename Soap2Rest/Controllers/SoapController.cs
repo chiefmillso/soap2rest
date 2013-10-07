@@ -18,7 +18,7 @@ namespace Soap2Rest.Controllers
 {
     public class SoapController : ApiController
     {
-        //[OutputCache(Duration = 60 * 1, VaryByParam = "action;url;payload", Location = OutputCacheLocation.ServerAndClient, NoStore = true)]
+        [OutputCache(Duration = 60 * 1, VaryByParam = "action;url;payload", Location = OutputCacheLocation.ServerAndClient, NoStore = true)]
         public async Task<HttpResponseMessage> Get(string action, string service, string payload)
         {
             const string soapTemplate =
